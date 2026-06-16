@@ -3,9 +3,7 @@ const { crearUsuario, actualizarUsuario } = require('../controllers/user.control
 
 const router = Router();
 
-// Cuando alguien entre a GET /usuarios, se dispara el controlador
-router.get('/usuarios', crearUsuario);
-
-router.patch('/usuarios', actualizarUsuario);
+router.post('/usuarios', crearUsuario);
+router.patch('/usuarios/:id', actualizarUsuario);
 
 module.exports = router;

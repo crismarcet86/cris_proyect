@@ -16,14 +16,15 @@ app.use('/api', usuarioRutas);
 async function iniciarServidor() {
     try {
         // .sync() crea las tablas en MySQL si no existen
-        await sequelize.sync({ force: false }); 
+        await sequelize.sync({ alter: process.env.NODE_ENV === 'development' });
         console.log('✅ Conexión a MySQL establecida con éxito.');
-        
+
         app.listen(PORT, () => {
             console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
         });
     } catch (error) {
         console.error('❌ No se pudo conectar a la base de datos:', error);
+        process.exit(1);
     }
 }
 

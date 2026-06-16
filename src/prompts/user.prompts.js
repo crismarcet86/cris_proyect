@@ -1,17 +1,17 @@
-/**
- * Almacén centralizado de Prompts para Claude AI
- */
 module.exports = {
-    // Prompt estático (no cambia)
-    BIENVENIDA_SISTEMA: "Eres un asistente de soporte técnico amigable. Saluda al usuario de forma ejecutiva.",
+    SISTEMA_ANALISIS: "Eres un asistente de seguridad. Analiza cambios en perfiles de usuario y detecta modificaciones sospechosas. Responde solo con un análisis breve.",
 
-    // Prompt dinámico (una función que recibe datos del usuario y genera el texto)
     MODIFICACION_USUARIO: (nombreAntiguo, datosNuevos) => {
-        return `El usuario anteriormente se llamaba "${nombreAntiguo}". 
-Los nuevos datos que se quieren actualizar son: ${JSON.stringify(datosNuevos)}.
-Por favor, analiza si el cambio de nombre parece legítimo o si es un cambio drástico que requiera una alerta de seguridad. Responde solo con un análisis breve.`;
+        const sanitize = (val, max) => String(val ?? '').replace(/"""/g, '').replace(/\n/g, ' ').slice(0, max);
+        const nombre = sanitize(datosNuevos.nombre, 100);
+        const apellido = sanitize(datosNuevos.apellido, 100);
+        const email = sanitize(datosNuevos.email, 200);
+        const anterior = sanitize(nombreAntiguo, 100);
+        return `Analiza el siguiente cambio de perfil de usuario.
+Nombre anterior: """${anterior}"""
+Nuevo nombre: """${nombre}"""
+Nuevo apellido: """${apellido}"""
+Nuevo email: """${email}"""
+¿El cambio parece legítimo o requiere una alerta de seguridad? Responde solo con un análisis breve.`;
     },
-
-    // Puedes seguir agregando más prompts aquí abajo...
-    REPORTE_MENSUAL: (mes) => `Genera un resumen ejecutivo para el mes de ${mes}.`
 };
